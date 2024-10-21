@@ -2,6 +2,10 @@
 
 Hoje vamos aprender como criar uma aplicação de linha de comando interativa usando Go! 🎉 Vamos construir uma interface que busca dados de usuários do GitHub e exibe as informações diretamente no terminal. Além disso, vamos aprender a configurar o ambiente do projeto, usar a biblioteca `tview` para a interface e `resty` para as requisições HTTP.
 
+## Screenshot
+
+![App CLI Busca Usuários do GitHub](./assets/screen.png)
+
 ### Passo 1: Configurando o Projeto
 
 1. **Crie uma pasta para o projeto**:
@@ -66,11 +70,11 @@ Começamos importando as bibliotecas necessárias no nosso código:
 
 ```go
 import (
-    "encoding/json"
-    "fmt"
-    "github.com/gdamore/tcell/v2"
-    "github.com/go-resty/resty/v2"
-    "github.com/rivo/tview"
+  "encoding/json"
+  "fmt"
+  "github.com/gdamore/tcell/v2"
+  "github.com/go-resty/resty/v2"
+  "github.com/rivo/tview"
 )
 ```
 
@@ -84,12 +88,12 @@ Agora, vamos definir uma estrutura `GitHubUser` para armazenar os dados do usuá
 
 ```go
 type GitHubUser struct {
-    Login     string `json:"login"`
-    Name      string `json:"name"`
-    Bio       string `json:"bio"`
-    Location  string `json:"location"`
-    Followers int    `json:"followers"`
-    Following int    `json:"following"`
+  Login     string `json:"login"`
+  Name      string `json:"name"`
+  Bio       string `json:"bio"`
+  Location  string `json:"location"`
+  Followers int    `json:"followers"`
+  Following int    `json:"following"`
 }
 ```
 
@@ -160,35 +164,35 @@ O `tview` é uma poderosa biblioteca para construir interfaces de texto no termi
 
 ```go
 func (a *App) setupUI() {
-    a.form = tview.NewForm()
-    a.inputField = tview.NewInputField().
-        SetLabel("GitHub Username: ").
-        SetFieldWidth(30)
+  a.form = tview.NewForm()
+  a.inputField = tview.NewInputField().
+    SetLabel("GitHub Username: ").
+    SetFieldWidth(30)
 
-    a.form.AddFormItem(a.inputField)
-    a.form.AddButton("Search", func() {
-        username := a.inputField.GetText()
-        user, err := a.fetchGitHubUser(username)
-        if err != nil {
-            a.textView.SetText(fmt.Sprintf("Error: %v", err))
-            return
-        }
-        a.updateUserInfo(user)
-    })
-    a.form.AddButton("Quit", func() {
-        a.app.Stop()
-    })
+  a.form.AddFormItem(a.inputField)
+  a.form.AddButton("Search", func() {
+    username := a.inputField.GetText()
+    user, err := a.fetchGitHubUser(username)
+    if err != nil {
+      a.textView.SetText(fmt.Sprintf("Error: %v", err))
+      return
+    }
+    a.updateUserInfo(user)
+  })
+  a.form.AddButton("Quit", func() {
+    a.app.Stop()
+  })
 
-    a.textView = tview.NewTextView().
-        SetDynamicColors(true).
-        SetRegions(true).
-        SetWordWrap(true)
+  a.textView = tview.NewTextView().
+    SetDynamicColors(true).
+    SetRegions(true).
+    SetWordWrap(true)
 
-    flex := tview.NewFlex().
-        AddItem(a.form, 0, 1, true).
-        AddItem(a.textView, 0, 2, false)
+  flex := tview.NewFlex().
+    AddItem(a.form, 0, 1, true).
+    AddItem(a.textView, 0, 2, false)
 
-    a.app.SetRoot(flex, true)
+  a.app.SetRoot(flex, true)
 }
 ```
 
